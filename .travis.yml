@@ -1,0 +1,23 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker -build -t hoesslj/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true hoesslj/react-test npm test
+
+after_success: # To build production version 
+    - docker build -t hoesslj/multi-client ./client
+    - docker build -t hoesslj/multi-server ./server
+    - docker build -t hoesslj/multi-nginx ./nginx
+    - docker built -t hoesslj/multi-worker ./worker
+    # Take those images and push them to docker hub
+    # First, log in to the docker CLI
+    - echo "$DOCKER_PW" | docker login -u "$DOCKER_ID" --paswword-stdin
+    # Then push the different images
+    - docker push hoesslj/multi-client
+    - docker push hoesslj/multi-server
+    - docker push hoesslj/multi-nginx
+    - docker push hoesslj/multi-worker
