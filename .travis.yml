@@ -7,7 +7,8 @@ before_install:
     - docker build -t hoesslj/react-test -f ./client/Dockerfile.dev ./client/
 
 script:
-    - docker run -e CI=true hoesslj/react-test npm test
+    - docker info
+    #- docker run -e CI=true hoesslj/react-test npm test
 
 after_success: # To build production version 
     - docker build -t hoesslj/multi-client ./client
