@@ -25,3 +25,14 @@ after_success: # To build production version
     - docker push hoesslj/multi-server
     - docker push hoesslj/multi-nginx
     - docker push hoesslj/multi-worker
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-2
+    app: multi-docker
+    env: multiDocker-env-1
+    bucket_name: elasticbeanstalk-us-east-2-077844377417
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+
